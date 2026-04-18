@@ -1,0 +1,64 @@
+{
+  "name": "BBR",
+  "description": "BBR light-rail network derived from src/bbr.rkt",
+  "lines": [
+    {
+      "id": "a1",
+      "stops": ["crescent", "federal-park", "dalgal", "spindler", "hogan-park", "booth"],
+      "terminii": ["crescent", "booth"]
+    },
+    {
+      "id": "a2",
+      "stops": ["crescent", "federal-park", "tramsheds", "harold-park", "wigram", "hegarty", "st-james", "colbourne", "burton", "blackwattle-bay"],
+      "terminii": ["crescent", "blackwattle-bay"]
+    },
+    {
+      "id": "b",
+      "stops": ["broadway", "franklyn", "mitchell", "colbourne", "burton", "blackwattle-bay", "boathouse", "cook", "bellevue"],
+      "terminii": ["broadway", "bellevue"]
+    },
+    {
+      "id": "c1",
+      "stops": ["william-henry", "cowper", "stadium", "wentworth-park", "blackwattle-bay", "boathouse", "cook", "bellevue-port", "bridgewater", "glebe-point", "rozelle-bay", "crescent"],
+      "terminii": ["william-henry", "crescent"]
+    },
+    {
+      "id": "c2",
+      "stops": ["william-henry", "cowper", "stadium", "wentworth-park", "blackwattle-bay", "boathouse", "cook", "bellevue-port", "bridgewater", "glebe-point", "rozelle-bay", "jubilee-park", "tramsheds", "harold-park", "wigram"],
+      "terminii": ["william-henry", "wigram"]
+    }
+  ],
+  "stops": [
+    { "id": "bellevue",         "lines": ["b"] },
+    { "id": "bellevue-port",    "lines": ["c1", "c2"] },
+    { "id": "blackwattle-bay",  "lines": ["a2", "b", "c1", "c2"] },
+    { "id": "boathouse",        "lines": ["b", "c1", "c2"] },
+    { "id": "booth",            "lines": ["a1"] },
+    { "id": "bridgewater",      "lines": ["c1", "c2"] },
+    { "id": "broadway",         "lines": ["b"] },
+    { "id": "burton",           "lines": ["a2", "b"] },
+    { "id": "colbourne",        "lines": ["a2", "b"] },
+    { "id": "cook",             "lines": ["b", "c1", "c2"] },
+    { "id": "cowper",           "lines": ["c1", "c2"] },
+    { "id": "crescent",         "lines": ["a1", "a2", "c1"] },
+    { "id": "dalgal",           "lines": ["a1"] },
+    { "id": "federal-park",     "lines": ["a1", "a2"] },
+    { "id": "franklyn",         "lines": ["b"] },
+    { "id": "glebe-point",      "lines": ["c1", "c2"] },
+    { "id": "harold-park",      "lines": ["a2", "c2"] },
+    { "id": "hegarty",          "lines": ["a2"] },
+    { "id": "hogan-park",       "lines": ["a1"] },
+    { "id": "jubilee-park",     "lines": ["c2"] },
+    { "id": "mitchell",         "lines": ["b"] },
+    { "id": "rozelle-bay",      "lines": ["c1", "c2"] },
+    { "id": "spindler",         "lines": ["a1"] },
+    { "id": "st-james",         "lines": ["a2"] },
+    { "id": "stadium",          "lines": ["c1", "c2"] },
+    { "id": "tramsheds",        "lines": ["a2", "c2"] },
+    { "id": "wentworth-park",   "lines": ["c1", "c2"] },
+    { "id": "wigram",           "lines": ["a2", "c2"] },
+    { "id": "william-henry",    "lines": ["c1", "c2"] }
+  ],
+  "interchanges": ["crescent", "wigram", "blackwattle-bay", "colbourne"],
+  "terminii": ["booth", "crescent", "blackwattle-bay", "broadway", "bellevue", "william-henry", "wigram"]
+}
