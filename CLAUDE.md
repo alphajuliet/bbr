@@ -11,7 +11,31 @@ Two artefacts describing the "BBR" light-rail / tram network, with different sco
 
 The JSON is richer than the Racket source, so edits to `src/bbr.rkt` don't automatically flow into the JSON — reconcile by hand. Generated artefacts live in `images/` (`graph.dot`, `graph.png`).
 
-## Commands
+## Simulator app (`app/`)
+
+Browser-based visual simulation built with vanilla TypeScript + Vite + D3. Reads `data/bbr-network.json` as its sole source of truth (never duplicates network constants in code).
+
+```sh
+cd app
+npm install       # first time only
+npm run dev       # Vite dev server at http://localhost:5173
+npm run build     # tsc + Vite production build → app/dist/
+```
+
+**Source layout** (`app/src/`):
+- `types.ts` — all TypeScript interfaces (JSON schema types + sim types)
+- `network.ts` — parse JSON, build derived structures; key export: `buildNetwork()`, `getLegSegments()`, `otherEndpoint()`
+- `layout.ts` — d3-force run-once headless layout → `Positions` map
+- `sim.ts` — `SimState` + `tickSim(state, network, dtWall)` tick loop; train state machine; block and platform occupancy
+- `render.ts` — static SVG (segments with per-line colour offsets, stop/junction nodes) + `renderFrame()` for animated train markers
+- `ui.ts` — play/pause/speed controls, sim clock, train inspector panel, stop arrivals panel
+- `main.ts` — entry: wires all modules together, RAF loop
+
+**Key invariant**: `vite.config.ts` sets `server.fs.allow: ['.', '..']` so the dev server can resolve `../../data/bbr-network.json` from `app/src/main.ts`.
+
+**Train state machine**: each train holds exactly one resource (a segment block or a stop platform) at a time. A train parks at `progress = 0.999` when the next resource is full rather than releasing its current one. Junctions are pure track nodes (no platform capacity).
+
+## Racket commands
 
 Run from `src/` (the `write-graph` output path is relative: `../images/graph.dot`):
 
