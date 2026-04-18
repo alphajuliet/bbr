@@ -54,22 +54,16 @@
 (define line-a1 '(crescent federal-park dalgal spindler hogan-park booth))
 (define line-a2 '(crescent federal-park tramsheds harold-park wigram hegarty st-james
                            colbourne burton blackwattle-bay))
-(define line-a3 '(crescent federal-park tramsheds harold-park wigram hegarty st-james
-                           colbourne burton fish-market))
 
 ;; B line
-(define line-b1 '(broadway franklyn mitchell colbourne burton blackwattle-bay boathouse
-                           cook bellevue-port bridgewater glebe-point rozelle-bay crescent))
-(define line-b2 '(broadway franklyn mitchell colbourne burton blackwattle-bay boathouse
-                           cook bellevue))
+(define line-b '(broadway franklyn mitchell colbourne burton blackwattle-bay boathouse
+                          cook bellevue))
 
 ;; C line
 (define line-c1 '(william-henry cowper stadium wentworth-park blackwattle-bay boathouse cook
                                 bellevue-port bridgewater glebe-point rozelle-bay crescent))
 (define line-c2 '(william-henry cowper stadium wentworth-park blackwattle-bay boathouse cook
-                                bellevue-port bridgewater glebe-point rozelle-bay jubilee-oval))
-(define line-c3 '(william-henry cowper stadium wentworth-park blackwattle-bay boathouse cook
-                                bellevue-port bridgewater glebe-point rozelle-bay
+                                bellevue-port bridgewater glebe-point rozelle-bay jubilee-park
                                 tramsheds harold-park wigram))
 
 (define bbr (unweighted-graph/undirected '()))
@@ -78,12 +72,9 @@
 
 (add-line! bbr 'a1 line-a1)
 (add-line! bbr 'a2 line-a2)
-(add-line! bbr 'a3 line-a3)
-(add-line! bbr 'b1 line-b1)
-(add-line! bbr 'b2 line-b2)
+(add-line! bbr 'b line-b)
 (add-line! bbr 'c1 line-c1)
 (add-line! bbr 'c2 line-c2)
-(add-line! bbr 'c3 line-c3)
 
 ;; -------------------------
 ;; Vertex properties
@@ -107,10 +98,10 @@
 ;; Visualise the graph in a PNG file
 ;; write-graph :: g -> IO g
 (define (write-graph G)
-  (call-with-output-file "./graph.dot"
+  (call-with-output-file "../images/graph.dot"
     #:exists 'replace
     (λ (out) (graphviz G #:output out)))
-  (system "/usr/local/bin/fdp -Tpng -O ./graph.dot"))
+  system "/opt/homebrew/bin/fdp -Tpng -O ./graph.dot")
 
 ;; -------------------------
 ;; Unit tests
@@ -125,12 +116,12 @@
      (check-equal? (+ 2 3) 5)
 
      #;(test-case
-        "Test vertex properties"
-        (let ([a (attr 'broadway)]
-              [_ (vertex-property-set! 'broadway 'capacity 3)]
-              [b (attr 'broadway)])
-          (check-equal? (stop-capacity a) 1)
-          (check-equal? (stop-capacity b) 3)))))
+     "Test vertex propertis"
+     (let ([a (attr 'broadway)]
+           [_ (vertex-property-set! 'broadway 'capacity 3)]
+           [b (attr 'broadway)])
+       (check-equal? (stop-capacity a) 1)
+       (check-equal? (stop-capacity b) 3)))))
 
   (run-tests bbr-tests))
 
