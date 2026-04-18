@@ -4,9 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A Racket model of the "BBR" light-rail / tram network as an undirected graph. Lines (`a1`, `a2`, `b`, `c1`, `c2`) are lists of stop symbols; each line is unioned into a single graph with a per-edge label recording which lines use that edge.
+Two artefacts describing the "BBR" light-rail / tram network, with different scopes:
 
-Single source file: `src/bbr.rkt`. Generated artefacts live in `images/` (`graph.dot`, `graph.png`).
+- **`src/bbr.rkt`** — Racket graph model, topology only. Lines (`a1`, `a2`, `b`, `c1`, `c2`) are lists of stop symbols, unioned into a single undirected graph with per-edge line labels.
+- **`data/bbr-network.json`** — JSON description intended to feed a visual train simulation. Carries the same topology *plus* simulation data: per-segment track counts, per-stop platform counts, junctions where lines meet outside a stop, per-line headways and colours, and global timing constants.
+
+The JSON is richer than the Racket source, so edits to `src/bbr.rkt` don't automatically flow into the JSON — reconcile by hand. Generated artefacts live in `images/` (`graph.dot`, `graph.png`).
 
 ## Commands
 
@@ -38,6 +41,32 @@ The file `require`s several non-built-in packages. Install with `raco pkg instal
 - **Vertex property `attr`.** Declared with `define-vertex-property bbr attr #:init (stop)` *after* all lines are added, so every vertex inherits a fresh `stop` struct instance. Declaring it earlier would miss vertices created by later `add-line!` calls.
 - **`vertex-property-set!`** uses `eval` at runtime to build a `struct-lens` for a dynamically-named field, because `struct-lens` hard-codes field names at macro-expansion time. This is the reason `eval` appears here — don't "clean it up" without understanding that constraint.
 - **`stop` struct** is currently a placeholder with no fields. The commented-out test references `stop-capacity`, indicating the intended direction is to add fields (capacity, etc.) and mutate them via `vertex-property-set!`.
+
+## Simulation network description (`data/bbr-network.json`)
+
+### Schema
+
+- `simulation` — uniform timing constants in seconds: `segment-travel-time-seconds`, `dwell-time-seconds`, `turnaround-time-seconds`.
+- `lines[]` — `id`, ordered `stops`, `terminii`, `headway-seconds`, `colour`.
+- `stops[]` — `id`, `lines` (which lines stop here), `platforms` (≥1; >1 ⇒ passing loop / turnaround / multi-line dwell).
+- `junctions[]` — track nodes where lines meet *outside* a stop. `id` plus optional `connects` (adjacent stops/junctions). Junction IDs are disjoint from stop IDs.
+- `segments[]` — first-class inter-node edges. `endpoints` (unordered; either may be a stop or a junction), `lines` (every line using this segment), `tracks` (`1` = single-track block, `2` = parallel tracks).
+- `interchanges` / `terminii` — flat stop-id lists for quick reference.
+
+### Modelling rules worth knowing before editing
+
+- **Block-per-segment signalling.** `tracks: 1` ⇒ one train at a time, either direction. Where lines share physical track, the segment is listed **once** with all sharing line IDs — trains from those lines contend for the same block. Don't duplicate a segment per line.
+- **Junctions aren't stops.** A line's `stops` list skips its junctions. To reconstruct the physical path between two consecutive stops, walk `segments` via intermediate junctions (e.g. `a1` runs `crescent → junction-1 → federal-park`, not a direct edge).
+- **Uniform travel time.** `simulation.segment-travel-time-seconds` applies to every segment — no per-segment overrides by design. Promote to a per-segment field only if distance realism matters.
+- **No coordinates.** Layout is computed at runtime.
+- **Platform defaults.** Named interchanges = 3, single-line terminii = 2, everything else = 1. Placeholders; revise when the simulator reveals bottlenecks.
+
+### Invariants to re-check after edits
+
+- Every consecutive pair in each line's `stops` reconstructs as a path through `segments` that traverses only junctions (not other stops) and where every segment in the path carries that line's id.
+- Every `segments.endpoints` id is declared in `stops` or `junctions`; those sets are disjoint.
+- Every `junctions.connects` entry has a matching segment.
+- `platforms ≥ 1`, `tracks ≥ 1`, `headway-seconds > 0`, `simulation.*` positive.
 
 ## Conventions
 
