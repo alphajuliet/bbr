@@ -45,14 +45,14 @@ function releaseSegment(state: SimState, key: string): void {
 }
 
 // Collect every segment key from stopsInOrder[fromIdx] forward, stopping once
-// we reach a stop with platforms >= 2 (a passing loop / terminus). The result
-// is the full "section" the train must lock before entering.
-function computeSectionSegs(
+// we reach a stop with platforms >= 2 (a passing loop / terminus). Returns the
+// segment keys and the destination stop ID (the section-end stop).
+function computeSection(
   network: Network,
   lineId: string,
   stopsInOrder: string[],
   fromIdx: number,
-): string[] {
+): { segs: string[]; destStopId: string } {
   const segs: string[] = []
   let i = fromIdx
   while (i + 1 < stopsInOrder.length) {
@@ -61,19 +61,27 @@ function computeSectionSegs(
     const next = network.stopById.get(stopsInOrder[i])
     if (!next || next.platforms >= 2) break
   }
-  return segs
+  return { segs, destStopId: stopsInOrder[i] }
 }
 
-// Atomically check all segment capacities, then acquire them all.
-// Returns false (without acquiring anything) if any segment is full.
-function reserveAll(state: SimState, network: Network, segs: string[]): boolean {
+// Atomically check all segment capacities AND the destination platform, then
+// acquire everything. Returns false (acquiring nothing) if any resource is full.
+function reserveSection(
+  state: SimState,
+  network: Network,
+  segs: string[],
+  destStopId: string,
+): boolean {
   for (const sk of segs) {
-    const n = state.segmentOccupancy.get(sk) ?? 0
-    if (n >= network.segmentByKey.get(sk)!.tracks) return false
+    if ((state.segmentOccupancy.get(sk) ?? 0) >= network.segmentByKey.get(sk)!.tracks) return false
   }
+  const destStop = network.stopById.get(destStopId)!
+  if ((state.stopOccupancy.get(destStopId) ?? 0) >= destStop.platforms) return false
+
   for (const sk of segs) {
     state.segmentOccupancy.set(sk, (state.segmentOccupancy.get(sk) ?? 0) + 1)
   }
+  state.stopOccupancy.set(destStopId, (state.stopOccupancy.get(destStopId) ?? 0) + 1)
   return true
 }
 
@@ -101,6 +109,7 @@ function spawnTrain(network: Network, state: SimState, lineId: string, terminusI
     position: { kind: 'at-stop', stopId: terminusId, timeRemaining: dwell, mustTurn: false, sectionPending: [] },
     waiting: false,
     waitingSince: null,
+    pendingDestStop: null,
   })
 }
 
@@ -147,18 +156,20 @@ function advanceTrain(train: Train, state: SimState, network: Network, dt: numbe
 
     let allSegs: string[]
     if (pos.sectionPending.length > 0) {
-      // Mid-section: segments are already reserved from when we entered the section
+      // Mid-section: segments and destination platform already reserved
       allSegs = pos.sectionPending
       train.waiting = false; train.waitingSince = null
     } else {
       // At a passing loop or terminus: compute and atomically reserve the full next section
-      const sectionSegs = computeSectionSegs(
+      // including a platform slot at the destination stop
+      const { segs: sectionSegs, destStopId } = computeSection(
         network, train.lineId, train.stopsInOrder, train.currentStopIndex)
-      if (!reserveAll(state, network, sectionSegs)) {
+      if (!reserveSection(state, network, sectionSegs, destStopId)) {
         if (!train.waiting) { train.waiting = true; train.waitingSince = state.simTime }
-        return  // section blocked — wait
+        return  // section or destination platform blocked — wait
       }
       train.waiting = false; train.waitingSince = null
+      train.pendingDestStop = destStopId
       allSegs = sectionSegs
     }
 
@@ -193,13 +204,18 @@ function advanceTrain(train: Train, state: SimState, network: Network, dt: numbe
       pos.progress = overflow > 0 ? overflow / segmentTravelTime : 0
       train.waiting = false; train.waitingSince = null
     } else {
-      // Stop: acquire a platform slot
-      const stopData = network.stopById.get(arrivedAt)!
-      if (!acquireStop(state, arrivedAt, stopData.platforms)) {
-        pos.progress = 0.999  // platform full — hold the last section segment and wait
-        if (!train.waiting) { train.waiting = true; train.waitingSince = state.simTime }
-        return
+      // Stop: platform slot was pre-reserved when entering this section (pendingDestStop).
+      // For intermediate single-platform stops the slot must still be acquired normally.
+      const preReserved = arrivedAt === train.pendingDestStop
+      if (!preReserved) {
+        const stopData = network.stopById.get(arrivedAt)!
+        if (!acquireStop(state, arrivedAt, stopData.platforms)) {
+          pos.progress = 0.999  // platform full — hold the last section segment and wait
+          if (!train.waiting) { train.waiting = true; train.waitingSince = state.simTime }
+          return
+        }
       }
+      if (preReserved) train.pendingDestStop = null
       train.waiting = false; train.waitingSince = null
       releaseSegment(state, pos.segKey)
       train.currentStopIndex++
