@@ -50,7 +50,7 @@ export function initRender(
         .attr('x1', p0.x + nx * off).attr('y1', p0.y + ny * off)
         .attr('x2', p1.x + nx * off).attr('y2', p1.y + ny * off)
         .attr('stroke', line.colour)
-        .attr('stroke-width', 2.5)
+        .attr('stroke-width', 3.0)
         .attr('stroke-opacity', 0.75)
         .attr('stroke-linecap', 'round')
     })
@@ -75,7 +75,7 @@ export function initRender(
     nodeLayer.append('text')
       .attr('x', pos.x).attr('y', pos.y - r - 3)
       .attr('text-anchor', 'middle')
-      .attr('font-size', '9px')
+      .attr('font-size', '11pt')
       .attr('fill', '#9ca3af')
       .attr('pointer-events', 'none')
       .text(stop.id)
@@ -116,7 +116,10 @@ export function renderFrame(
     .attr('fill', d => d.colour)
     .attr('cx', d => trainX(d, positions))
     .attr('cy', d => trainY(d, positions))
-    .attr('opacity', d => d.id === state.selectedTrainId ? 1 : 0.85)
+    .attr('opacity', d => d.waiting ? 0.5 : d.id === state.selectedTrainId ? 1 : 0.85)
+    .attr('stroke', d => d.waiting ? '#facc15' : '#fff')
+    .attr('stroke-width', d => d.waiting ? 2 : 1)
+    .attr('stroke-dasharray', d => d.waiting ? '3 2' : null)
 }
 
 function trainCoords(train: Train, positions: Positions): { x: number; y: number } {

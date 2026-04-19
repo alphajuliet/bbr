@@ -69,6 +69,7 @@ export function buildNetwork(json: NetworkJson): Network {
       stops: lj.stops,
       terminii: [lj.terminii[0], lj.terminii[1]] as [string, string],
       headwaySeconds: lj['headway-seconds'],
+      maxTrains: lj['max-trains'],
       colour: lj.colour,
       route,
     })

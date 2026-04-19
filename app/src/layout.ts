@@ -20,8 +20,8 @@ export function computeLayout(network: Network, width: number, height: number): 
   }))
 
   const sim = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink<N, L>(links).id((_, i) => i).distance(80))
-    .force('charge', d3.forceManyBody<N>().strength(-300))
+    .force('link', d3.forceLink<N, L>(links).id((_, i) => i).distance(50))
+    .force('charge', d3.forceManyBody<N>().strength(-150))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .stop()
 

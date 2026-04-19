@@ -84,11 +84,19 @@ function trainPanel(train: Train, network: Network): string {
       ? `Turning (${pos.timeRemaining.toFixed(0)}s)`
       : pos.timeRemaining > 0
         ? `Departs in ${pos.timeRemaining.toFixed(0)}s`
-        : 'Departing...'
+        : train.waiting
+          ? 'Waiting — section blocked'
+          : 'Departing...'
   } else if (pos.kind === 'in-segment') {
     location = `${pos.fromNodeId} → ${pos.toNodeId}`
-    const remainingSegs = pos.legSegs.length - pos.segIdx - pos.progress
-    eta = `${(remainingSegs * segmentTravelTime).toFixed(0)}s to next stop`
+    const nextStop = train.stopsInOrder[train.currentStopIndex + 1] ?? '?'
+    const leg = findLeg(network, train.lineId,
+      train.stopsInOrder[train.currentStopIndex], nextStop)
+    const segIdx = leg?.indexOf(pos.segKey) ?? 0
+    const segsLeft = leg ? leg.length - segIdx - pos.progress : 1 - pos.progress
+    eta = train.waiting
+      ? `Waiting — platform full at ${nextStop}`
+      : `${Math.max(0, segsLeft * segmentTravelTime).toFixed(0)}s to ${nextStop}`
   }
 
   return `
@@ -127,39 +135,44 @@ function arrivalsPanel(stopId: string, state: SimState, network: Network): strin
   `
 }
 
+function findLeg(network: Network, lineId: string, from: string, to: string): string[] | null {
+  const route = network.lines.get(lineId)?.route
+  const r = route?.find(
+    l => (l.fromStop === from && l.toStop === to) || (l.fromStop === to && l.toStop === from)
+  )
+  return r?.segments ?? null
+}
+
 function computeETA(train: Train, targetStopId: string, network: Network): number | null {
   const { segmentTravelTime, dwellTime } = network.simParams
   const pos = train.position
 
-  // Time already spent heading to the next stop, and which stop index that is
-  let timeToCurrentStop = 0
+  let t: number
   let startIdx: number
 
   if (pos.kind === 'at-stop') {
     if (pos.stopId === targetStopId) return 0
-    timeToCurrentStop = Math.max(0, pos.timeRemaining)
-    startIdx = train.currentStopIndex
+    t = Math.max(0, pos.timeRemaining)
+    startIdx = train.currentStopIndex + 1
   } else if (pos.kind === 'in-segment') {
-    // Remaining time to reach the next stop in the leg
-    const remainingSegs = pos.legSegs.length - pos.segIdx - pos.progress
-    timeToCurrentStop = remainingSegs * segmentTravelTime
-    startIdx = train.currentStopIndex + 1  // we're in transit to this stop index
-    if (train.stopsInOrder[startIdx] === targetStopId) return timeToCurrentStop
-    startIdx = startIdx  // will iterate from startIdx+1 below
+    const nextStop = train.stopsInOrder[train.currentStopIndex + 1]
+    const leg = findLeg(network, train.lineId, train.stopsInOrder[train.currentStopIndex], nextStop)
+    const segIdx = leg?.indexOf(pos.segKey) ?? 0
+    const segsLeft = leg ? leg.length - segIdx - pos.progress : 1 - pos.progress
+    t = Math.max(0, segsLeft * segmentTravelTime)
+    startIdx = train.currentStopIndex + 1
+    if (train.stopsInOrder[startIdx] === targetStopId) return t
+    t += dwellTime
+    startIdx++
   } else {
     return null
   }
 
-  let t = timeToCurrentStop
-  const start = pos.kind === 'at-stop' ? startIdx + 1 : startIdx + 1
-
-  for (let i = start; i < train.stopsInOrder.length; i++) {
+  for (let i = startIdx; i < train.stopsInOrder.length; i++) {
     const sid = train.stopsInOrder[i]
     const prev = train.stopsInOrder[i - 1]
-    const leg = network.lines.get(train.lineId)!.route.find(
-      r => (r.fromStop === prev && r.toStop === sid) || (r.fromStop === sid && r.toStop === prev)
-    )
-    t += (leg?.segments.length ?? 1) * segmentTravelTime
+    const leg = findLeg(network, train.lineId, prev, sid)
+    t += (leg?.length ?? 1) * segmentTravelTime
     if (sid === targetStopId) return t
     t += dwellTime
   }
