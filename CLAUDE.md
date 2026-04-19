@@ -33,7 +33,7 @@ npm run build     # tsc + Vite production build → app/dist/
 
 **Key invariant**: `vite.config.ts` sets `server.fs.allow: ['.', '..']` so the dev server can resolve `../../data/bbr-network.json` from `app/src/main.ts`.
 
-**Deployment**: `wrangler.toml` in `app/` targets the `bbr` Cloudflare Worker. Run `npm run build` then `npx wrangler deploy` from `app/` to publish.
+**Deployment**: `wrangler.toml` in `app/` targets the `bbr` Cloudflare Worker. The worker auto-deploys from GitHub via Cloudflare's CI — `wrangler.toml` includes a `[build]` command (`npm ci && npm run build`) so devDependencies (`tsc`, `vite`) are available in the build environment. To deploy manually: `npm run build` then `npx wrangler deploy` from `app/`.
 
 **Train state machine**: trains move through a two-level resource model:
 
