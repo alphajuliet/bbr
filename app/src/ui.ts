@@ -111,27 +111,52 @@ function trainPanel(train: Train, network: Network): string {
 function arrivalsPanel(stopId: string, state: SimState, network: Network): string {
   const stop = network.stopById.get(stopId)!
 
+  const present: Train[] = []
   const arrivals: Array<{ lineId: string; colour: string; eta: number }> = []
+
   for (const train of state.trains.values()) {
-    const eta = computeETA(train, stopId, network)
-    if (eta !== null) {
-      arrivals.push({ lineId: train.lineId, colour: train.colour, eta })
+    if (train.position.kind === 'at-stop' && train.position.stopId === stopId) {
+      present.push(train)
+    } else {
+      const eta = computeETA(train, stopId, network)
+      if (eta !== null) arrivals.push({ lineId: train.lineId, colour: train.colour, eta })
     }
   }
   arrivals.sort((a, b) => a.eta - b.eta)
 
-  const rows = arrivals.slice(0, 5).map(a => `
+  const platformRows = present.map(train => {
+    const pos = train.position as Extract<typeof train.position, { kind: 'at-stop' }>
+    const dest = train.stopsInOrder[train.stopsInOrder.length - 1]
+    const status = pos.mustTurn
+      ? `Turning (${pos.timeRemaining.toFixed(0)}s)`
+      : pos.timeRemaining > 0
+        ? `Departs in ${pos.timeRemaining.toFixed(0)}s`
+        : train.waiting ? 'Waiting — blocked' : 'Departing...'
+    return `
+      <div class="arrival at-platform">
+        <span class="dot" style="background:${train.colour}"></span>
+        <span><span class="line-chip" style="background:${train.colour}">${train.lineId.toUpperCase()}</span> to ${dest}</span>
+        <span class="status-note">${status}</span>
+      </div>`
+  }).join('')
+
+  const arrivalRows = arrivals.slice(0, 5).map(a => `
     <div class="arrival">
       <span class="dot" style="background:${a.colour}"></span>
       ${a.lineId.toUpperCase()} — ${a.eta < 5 ? 'arriving' : a.eta.toFixed(0) + 's'}
     </div>
   `).join('')
 
+  const platformSection = present.length > 0
+    ? `<div class="section-label">At platform</div>${platformRows}`
+    : ''
+  const arrivalSection = `<div class="section-label">Upcoming</div>${arrivalRows || '<div class="arrival">No trains en route</div>'}`
+
   return `
     <h3>${stopId}</h3>
     <div class="field">Lines: <span>${stop.lines.map(l => `<span class="line-chip" style="background:${network.lines.get(l)?.colour}">${l.toUpperCase()}</span>`).join(' ')}</span></div>
     <div class="field">Platforms: <span>${stop.platforms}</span></div>
-    <div id="arrivals-list">${rows || '<div class="arrival">No trains en route</div>'}</div>
+    <div id="arrivals-list">${platformSection}${arrivalSection}</div>
   `
 }
 
