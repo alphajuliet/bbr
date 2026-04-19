@@ -33,7 +33,25 @@ npm run build     # tsc + Vite production build → app/dist/
 
 **Key invariant**: `vite.config.ts` sets `server.fs.allow: ['.', '..']` so the dev server can resolve `../../data/bbr-network.json` from `app/src/main.ts`.
 
-**Train state machine**: each train holds exactly one resource (a segment block or a stop platform) at a time. A train parks at `progress = 0.999` when the next resource is full rather than releasing its current one. Junctions are pure track nodes (no platform capacity).
+**Deployment**: `wrangler.toml` in `app/` targets the `bbr` Cloudflare Worker. Run `npm run build` then `npx wrangler deploy` from `app/` to publish.
+
+**Train state machine**: trains move through a two-level resource model:
+
+- **Section reservation** (`computeSection` + `reserveSection` in `sim.ts`): before a train departs a passing loop or terminus, it atomically reserves all segment keys in the run of single-platform stops ahead, *plus* a platform slot at the section-end stop (the next passing loop or terminus). This prevents both head-on collisions on single-track and platform overflows at destinations. The reserved segment keys are carried in `remaining` (`in-segment`) / `sectionPending` (`at-stop`) as the train traverses the section. The pre-reserved destination platform is tracked in `train.pendingDestStop`; on arrival the `acquireStop` call is skipped.
+- **Intermediate stops** (platforms = 1, mid-section): acquired/released normally on arrival/departure.
+- A train parks at `progress = 0.999` (holding its last segment) only when an intermediate platform is unexpectedly full.
+- Junctions are pure track nodes — no platform capacity, traversed without blocking.
+
+**`Train` fields of note** (`types.ts`):
+- `waiting: boolean` — true while blocked; train marker dims and gains a yellow dashed stroke
+- `waitingSince: number | null` — sim time when the current wait began; alerts fire after 180 s
+- `pendingDestStop: string | null` — section-end stop whose platform was pre-reserved
+
+**UI panels** (`ui.ts`):
+- Clicking a train opens the inspector (line, direction, location, ETA / wait status).
+- Clicking a stop opens the stop panel: **At platform** section lists trains currently there (destination, live status); **Upcoming** lists the next 5 arrivals by ETA.
+- Blocked trains trigger amber alert banners at the bottom after 3 sim-minutes.
+- Speed options: 0×, 0.5×, 1×, 2×, 5×, 10×, 20×.
 
 ## Racket commands
 
@@ -71,7 +89,7 @@ The file `require`s several non-built-in packages. Install with `raco pkg instal
 ### Schema
 
 - `simulation` — uniform timing constants in seconds: `segment-travel-time-seconds`, `dwell-time-seconds`, `turnaround-time-seconds`.
-- `lines[]` — `id`, ordered `stops`, `terminii`, `headway-seconds`, `colour`.
+- `lines[]` — `id`, ordered `stops`, `terminii`, `headway-seconds`, `max-trains`, `colour`.
 - `stops[]` — `id`, `lines` (which lines stop here), `platforms` (≥1; >1 ⇒ passing loop / turnaround / multi-line dwell).
 - `junctions[]` — track nodes where lines meet *outside* a stop. `id` plus optional `connects` (adjacent stops/junctions). Junction IDs are disjoint from stop IDs.
 - `segments[]` — first-class inter-node edges. `endpoints` (unordered; either may be a stop or a junction), `lines` (every line using this segment), `tracks` (`1` = single-track block, `2` = parallel tracks).
@@ -83,7 +101,8 @@ The file `require`s several non-built-in packages. Install with `raco pkg instal
 - **Junctions aren't stops.** A line's `stops` list skips its junctions. To reconstruct the physical path between two consecutive stops, walk `segments` via intermediate junctions (e.g. `a1` runs `crescent → junction-1 → federal-park`, not a direct edge).
 - **Uniform travel time.** `simulation.segment-travel-time-seconds` applies to every segment — no per-segment overrides by design. Promote to a per-segment field only if distance realism matters.
 - **No coordinates.** Layout is computed at runtime.
-- **Platform defaults.** Named interchanges = 3, single-line terminii = 2, everything else = 1. Placeholders; revise when the simulator reveals bottlenecks.
+- **Platform defaults.** Named interchanges = 3, single-line terminii = 2, everything else = 1. These are starting points — adjust when the simulator reveals bottlenecks.
+- **Four junctions** are currently defined: `junction-1` (crescent/federal-park/junction-4 fork), `junction-2` (junction-3/tramsheds/jubilee-park fork), `junction-3` (federal-park/dalgal/junction-2 fork), `junction-4` (rozelle-bay/junction-1/jubilee-park fork). When adding a junction, declare it in `junctions[]`, add its segments, update any `connects` arrays on adjacent junctions that now route through it, and verify the BFS path invariant for every affected line.
 
 ### Invariants to re-check after edits
 
