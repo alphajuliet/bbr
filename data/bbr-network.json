@@ -36,7 +36,7 @@
       "stops": ["william-henry", "cowper", "stadium", "wentworth-park", "blackwattle-bay", "boathouse", "cook", "bellevue-port", "bridgewater", "glebe-point", "rozelle-bay", "crescent"],
       "terminii": ["william-henry", "crescent"],
       "headway-seconds": 600,
-      "max-trains": 3,
+      "max-trains": 2,
       "colour": "#4daf4a"
     },
     {
@@ -64,7 +64,7 @@
     { "id": "dalgal",           "lines": ["a1"],                   "platforms": 1 },
     { "id": "federal-park",     "lines": ["a1", "a2"],             "platforms": 1 },
     { "id": "franklyn",         "lines": ["b"],                    "platforms": 1 },
-    { "id": "glebe-point",      "lines": ["c1", "c2"],             "platforms": 1 },
+    { "id": "glebe-point",      "lines": ["c1", "c2"],             "platforms": 2 },
     { "id": "harold-park",      "lines": ["a2", "c2"],             "platforms": 1 },
     { "id": "hegarty",          "lines": ["a2"],                   "platforms": 1 },
     { "id": "hogan-park",       "lines": ["a1"],                   "platforms": 1 },
