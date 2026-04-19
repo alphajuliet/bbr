@@ -1,7 +1,7 @@
 import type { Network } from './network'
 import type { SimState, Train } from './types'
 
-const SPEED_VALUES = [0, 0.5, 1, 2, 5, 10]
+const SPEED_VALUES = [0, 0.5, 1, 2, 5, 10, 20]
 
 export function initUI(state: SimState): void {
   const playBtn = document.getElementById('play-btn')!
@@ -32,6 +32,8 @@ export function initUI(state: SimState): void {
     }
   })
 }
+
+const BLOCK_ALERT_THRESHOLD = 180  // sim-seconds before a blocked train triggers an alert
 
 export function updateUI(state: SimState, network: Network): void {
   // Sim clock
@@ -65,6 +67,21 @@ export function updateUI(state: SimState, network: Network): void {
   } else {
     panel.classList.remove('visible')
   }
+
+  // Blocked-train alerts
+  const alertsEl = document.getElementById('alerts')!
+  const blocked = Array.from(state.trains.values()).filter(t =>
+    t.waiting && t.waitingSince !== null &&
+    state.simTime - t.waitingSince >= BLOCK_ALERT_THRESHOLD
+  )
+  alertsEl.innerHTML = blocked.map(t => {
+    const waited = Math.floor(state.simTime - t.waitingSince!)
+    const loc = t.position.kind === 'at-stop' ? t.position.stopId : `${t.position.fromNodeId} → ${t.position.toNodeId}`
+    return `<div class="alert">
+      <span class="alert-dot" style="background:${t.colour}"></span>
+      ${t.lineId.toUpperCase()} blocked at ${loc} for ${Math.floor(waited / 60)}m ${waited % 60}s
+    </div>`
+  }).join('')
 }
 
 function pad(n: number): string { return String(n).padStart(2, '0') }

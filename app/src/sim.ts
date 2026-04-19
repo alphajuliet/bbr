@@ -100,6 +100,7 @@ function spawnTrain(network: Network, state: SimState, lineId: string, terminusI
     currentStopIndex: 0,
     position: { kind: 'at-stop', stopId: terminusId, timeRemaining: dwell, mustTurn: false, sectionPending: [] },
     waiting: false,
+    waitingSince: null,
   })
 }
 
@@ -130,7 +131,7 @@ function advanceTrain(train: Train, state: SimState, network: Network, dt: numbe
   if (pos.kind === 'at-stop') {
     if (pos.timeRemaining > 0) {
       pos.timeRemaining = Math.max(0, pos.timeRemaining - dt)
-      train.waiting = false
+      train.waiting = false; train.waitingSince = null
       return
     }
     if (pos.mustTurn) {
@@ -138,7 +139,7 @@ function advanceTrain(train: Train, state: SimState, network: Network, dt: numbe
       train.currentStopIndex = 0
       pos.mustTurn = false
       pos.sectionPending = []
-      train.waiting = false
+      train.waiting = false; train.waitingSince = null
     }
 
     const nextStopId = train.stopsInOrder[train.currentStopIndex + 1]
@@ -148,16 +149,16 @@ function advanceTrain(train: Train, state: SimState, network: Network, dt: numbe
     if (pos.sectionPending.length > 0) {
       // Mid-section: segments are already reserved from when we entered the section
       allSegs = pos.sectionPending
-      train.waiting = false
+      train.waiting = false; train.waitingSince = null
     } else {
       // At a passing loop or terminus: compute and atomically reserve the full next section
       const sectionSegs = computeSectionSegs(
         network, train.lineId, train.stopsInOrder, train.currentStopIndex)
       if (!reserveAll(state, network, sectionSegs)) {
-        train.waiting = true
+        if (!train.waiting) { train.waiting = true; train.waitingSince = state.simTime }
         return  // section blocked — wait
       }
-      train.waiting = false
+      train.waiting = false; train.waitingSince = null
       allSegs = sectionSegs
     }
 
@@ -190,16 +191,16 @@ function advanceTrain(train: Train, state: SimState, network: Network, dt: numbe
       pos.fromNodeId = arrivedAt
       pos.toNodeId = otherEndpoint(nextSeg, arrivedAt, network)
       pos.progress = overflow > 0 ? overflow / segmentTravelTime : 0
-      train.waiting = false
+      train.waiting = false; train.waitingSince = null
     } else {
       // Stop: acquire a platform slot
       const stopData = network.stopById.get(arrivedAt)!
       if (!acquireStop(state, arrivedAt, stopData.platforms)) {
         pos.progress = 0.999  // platform full — hold the last section segment and wait
-        train.waiting = true
+        if (!train.waiting) { train.waiting = true; train.waitingSince = state.simTime }
         return
       }
-      train.waiting = false
+      train.waiting = false; train.waitingSince = null
       releaseSegment(state, pos.segKey)
       train.currentStopIndex++
       const isTerminus = train.currentStopIndex === train.stopsInOrder.length - 1

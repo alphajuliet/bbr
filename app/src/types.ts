@@ -103,7 +103,8 @@ export interface Train {
   stopsInOrder: string[]
   currentStopIndex: number
   position: TrainPosition
-  waiting: boolean   // true when blocked waiting for a segment or platform
+  waiting: boolean      // true when blocked waiting for a segment or platform
+  waitingSince: number | null  // simTime when the current wait started (null if not waiting)
 }
 
 export interface SimState {
