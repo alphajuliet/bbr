@@ -81,12 +81,19 @@ export function initRender(
       .text(stop.id)
   }
 
-  // Junction nodes (small dots, no label)
+  // Junction nodes with labels
   for (const junc of network.json.junctions) {
     const pos = positions.get(junc.id)!
     nodeLayer.append('circle')
       .attr('cx', pos.x).attr('cy', pos.y).attr('r', 2)
-      .attr('fill', '#4b5563')
+      .attr('fill', '#60a5fa')
+    nodeLayer.append('text')
+      .attr('x', pos.x).attr('y', pos.y - 5)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', '9px')
+      .attr('fill', '#60a5fa')
+      .attr('pointer-events', 'none')
+      .text(junc.id)
   }
 
   return { trainLayer }
