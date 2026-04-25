@@ -29,6 +29,7 @@ export interface LineJson {
 
 export interface StopJson {
   id: string
+  label?: string
   lines: string[]
   platforms: number
   x?: number

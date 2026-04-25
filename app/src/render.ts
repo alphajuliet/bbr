@@ -78,7 +78,7 @@ export function initRender(
       .attr('font-size', '11pt')
       .attr('fill', '#9ca3af')
       .attr('pointer-events', 'none')
-      .text(stop.id)
+      .text(stop.label ?? stop.id)
   }
 
   // Junction nodes with labels
