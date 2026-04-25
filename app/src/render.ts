@@ -73,9 +73,9 @@ export function initRender(
       .on('click', (e: MouseEvent) => { e.stopPropagation(); onStopClick(stop.id) })
 
     nodeLayer.append('text')
-      .attr('x', pos.x).attr('y', pos.y - r - 3)
+      .attr('x', pos.x).attr('y', pos.y - r - 5)
       .attr('text-anchor', 'middle')
-      .attr('font-size', '11pt')
+      .attr('font-size', '9pt')
       .attr('fill', '#9ca3af')
       .attr('pointer-events', 'none')
       .text(stop.label ?? stop.id)
