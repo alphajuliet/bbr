@@ -3,7 +3,32 @@ import type { Network } from './network'
 
 export type Positions = Map<string, { id: string; x: number; y: number }>
 
+const SVG_W = 1190.55
+const SVG_H = 841.89
+const PADDING = 40
+
+function allNodesHavePositions(network: Network): boolean {
+  return (
+    network.json.stops.every(s => s.x != null && s.y != null) &&
+    network.json.junctions.every(j => j.x != null && j.y != null)
+  )
+}
+
 export function computeLayout(network: Network, width: number, height: number): Positions {
+  if (allNodesHavePositions(network)) {
+    const scaleX = (width - PADDING * 2) / SVG_W
+    const scaleY = (height - PADDING * 2) / SVG_H
+    const positions: Positions = new Map()
+    for (const s of network.json.stops) {
+      positions.set(s.id, { id: s.id, x: PADDING + s.x! * scaleX, y: PADDING + s.y! * scaleY })
+    }
+    for (const j of network.json.junctions) {
+      positions.set(j.id, { id: j.id, x: PADDING + j.x! * scaleX, y: PADDING + j.y! * scaleY })
+    }
+    return positions
+  }
+
+  // Fallback: force-directed layout (used when x/y are absent)
   type N = d3.SimulationNodeDatum & { id: string }
   type L = d3.SimulationLinkDatum<N>
 

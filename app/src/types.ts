@@ -31,11 +31,15 @@ export interface StopJson {
   id: string
   lines: string[]
   platforms: number
+  x?: number
+  y?: number
 }
 
 export interface JunctionJson {
   id: string
   connects: string[]
+  x?: number
+  y?: number
 }
 
 export interface SegmentJson {
