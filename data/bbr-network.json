@@ -424,8 +424,8 @@
         "federal-park",
         "junction-4"
       ],
-      "x": 473.39,
-      "y": 175.51
+      "x": 390,
+      "y": 200
     },
     {
       "id": "junction-2",
@@ -434,8 +434,8 @@
         "tramsheds",
         "jubilee-park"
       ],
-      "x": 419.76,
-      "y": 245.84
+      "x": 377,
+      "y": 295
     },
     {
       "id": "junction-3",
@@ -444,8 +444,8 @@
         "dalgal",
         "junction-2"
       ],
-      "x": 471.05,
-      "y": 252.92
+      "x": 368,
+      "y": 241
     },
     {
       "id": "junction-4",
@@ -454,8 +454,8 @@
         "junction-1",
         "jubilee-park"
       ],
-      "x": 455.15,
-      "y": 202.06
+      "x": 418,
+      "y": 202
     }
   ],
   "segments": [
