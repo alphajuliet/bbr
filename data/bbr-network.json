@@ -9,120 +9,842 @@
   "lines": [
     {
       "id": "a1",
-      "stops": ["crescent", "federal-park", "dalgal", "spindler", "hogan-park", "booth"],
-      "terminii": ["crescent", "booth"],
+      "stops": [
+        "crescent",
+        "federal-park",
+        "dalgal",
+        "spindler",
+        "hogan-park",
+        "booth"
+      ],
+      "terminii": [
+        "crescent",
+        "booth"
+      ],
       "headway-seconds": 600,
       "max-trains": 2,
       "colour": "#e41a1c"
     },
     {
       "id": "a2",
-      "stops": ["crescent", "federal-park", "tramsheds", "harold-park", "wigram", "hegarty", "st-james", "foley-park", "colbourne", "burton", "blackwattle-bay"],
-      "terminii": ["crescent", "blackwattle-bay"],
+      "stops": [
+        "crescent",
+        "federal-park",
+        "tramsheds",
+        "harold-park",
+        "wigram",
+        "hegarty",
+        "st-james",
+        "foley-park",
+        "colbourne",
+        "burton",
+        "blackwattle-bay"
+      ],
+      "terminii": [
+        "crescent",
+        "blackwattle-bay"
+      ],
       "headway-seconds": 600,
       "max-trains": 2,
       "colour": "#ff7f00"
     },
     {
       "id": "b",
-      "stops": ["broadway", "franklyn", "mitchell", "colbourne", "burton", "blackwattle-bay", "boathouse", "cook", "bellevue"],
-      "terminii": ["broadway", "bellevue"],
+      "stops": [
+        "broadway",
+        "franklyn",
+        "mitchell",
+        "colbourne",
+        "burton",
+        "blackwattle-bay",
+        "boathouse",
+        "cook",
+        "bellevue"
+      ],
+      "terminii": [
+        "broadway",
+        "bellevue"
+      ],
       "headway-seconds": 600,
       "max-trains": 2,
       "colour": "#377eb8"
     },
     {
       "id": "c1",
-      "stops": ["william-henry", "cowper", "stadium", "wentworth-park", "blackwattle-bay", "boathouse", "cook", "bellevue-port", "bridgewater", "glebe-point", "rozelle-bay", "crescent"],
-      "terminii": ["william-henry", "crescent"],
+      "stops": [
+        "william-henry",
+        "cowper",
+        "stadium",
+        "wentworth-park",
+        "blackwattle-bay",
+        "boathouse",
+        "cook",
+        "bellevue-port",
+        "bridgewater",
+        "glebe-point",
+        "rozelle-bay",
+        "crescent"
+      ],
+      "terminii": [
+        "william-henry",
+        "crescent"
+      ],
       "headway-seconds": 600,
       "max-trains": 2,
       "colour": "#4daf4a"
     },
     {
       "id": "c2",
-      "stops": ["william-henry", "cowper", "stadium", "wentworth-park", "blackwattle-bay", "boathouse", "cook", "bellevue-port", "bridgewater", "glebe-point", "rozelle-bay", "jubilee-park", "tramsheds", "harold-park", "wigram"],
-      "terminii": ["william-henry", "wigram"],
+      "stops": [
+        "william-henry",
+        "cowper",
+        "stadium",
+        "wentworth-park",
+        "blackwattle-bay",
+        "boathouse",
+        "cook",
+        "bellevue-port",
+        "bridgewater",
+        "glebe-point",
+        "rozelle-bay",
+        "jubilee-park",
+        "tramsheds",
+        "harold-park",
+        "wigram"
+      ],
+      "terminii": [
+        "william-henry",
+        "wigram"
+      ],
       "headway-seconds": 600,
       "max-trains": 2,
       "colour": "#984ea3"
     }
   ],
   "stops": [
-    { "id": "bellevue",         "lines": ["b"],                    "platforms": 2 },
-    { "id": "bellevue-port",    "lines": ["c1", "c2"],             "platforms": 2 },
-    { "id": "blackwattle-bay",  "lines": ["a2", "b", "c1", "c2"],  "platforms": 3 },
-    { "id": "boathouse",        "lines": ["b", "c1", "c2"],        "platforms": 2 },
-    { "id": "booth",            "lines": ["a1"],                   "platforms": 2 },
-    { "id": "bridgewater",      "lines": ["c1", "c2"],             "platforms": 1 },
-    { "id": "broadway",         "lines": ["b"],                    "platforms": 2 },
-    { "id": "burton",           "lines": ["a2", "b"],              "platforms": 2 },
-    { "id": "colbourne",        "lines": ["a2", "b"],              "platforms": 3 },
-    { "id": "cook",             "lines": ["b", "c1", "c2"],        "platforms": 2 },
-    { "id": "cowper",           "lines": ["c1", "c2"],             "platforms": 1 },
-    { "id": "crescent",         "lines": ["a1", "a2", "c1"],       "platforms": 3 },
-    { "id": "dalgal",           "lines": ["a1"],                   "platforms": 1 },
-    { "id": "federal-park",     "lines": ["a1", "a2"],             "platforms": 2 },
-    { "id": "foley-park",       "lines": ["a2"],                   "platforms": 1 },
-    { "id": "franklyn",         "lines": ["b"],                    "platforms": 1 },
-    { "id": "glebe-point",      "lines": ["c1", "c2"],             "platforms": 2 },
-    { "id": "harold-park",      "lines": ["a2", "c2"],             "platforms": 1 },
-    { "id": "hegarty",          "lines": ["a2"],                   "platforms": 1 },
-    { "id": "hogan-park",       "lines": ["a1"],                   "platforms": 1 },
-    { "id": "jubilee-park",     "lines": ["c2"],                   "platforms": 2 },
-    { "id": "mitchell",         "lines": ["b"],                    "platforms": 1 },
-    { "id": "rozelle-bay",      "lines": ["c1", "c2"],             "platforms": 1 },
-    { "id": "spindler",         "lines": ["a1"],                   "platforms": 2 },
-    { "id": "st-james",         "lines": ["a2"],                   "platforms": 1 },
-    { "id": "stadium",          "lines": ["c1", "c2"],             "platforms": 2 },
-    { "id": "tramsheds",        "lines": ["a2", "c2"],             "platforms": 1 },
-    { "id": "wentworth-park",   "lines": ["c1", "c2"],             "platforms": 1 },
-    { "id": "wigram",           "lines": ["a2", "c2"],             "platforms": 3 },
-    { "id": "william-henry",    "lines": ["c1", "c2"],             "platforms": 2 }
+    {
+      "id": "bellevue",
+      "lines": [
+        "b"
+      ],
+      "platforms": 2,
+      "x": 623.4,
+      "y": 234.35
+    },
+    {
+      "id": "bellevue-port",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 719.99,
+      "y": 273.65
+    },
+    {
+      "id": "blackwattle-bay",
+      "lines": [
+        "a2",
+        "b",
+        "c1",
+        "c2"
+      ],
+      "platforms": 3,
+      "x": 683.37,
+      "y": 244.4
+    },
+    {
+      "id": "boathouse",
+      "lines": [
+        "b",
+        "c1",
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 718.39,
+      "y": 336.12
+    },
+    {
+      "id": "booth",
+      "lines": [
+        "a1"
+      ],
+      "platforms": 2,
+      "x": 197.18,
+      "y": 424.82
+    },
+    {
+      "id": "bridgewater",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 1,
+      "x": 690.35,
+      "y": 238.58
+    },
+    {
+      "id": "broadway",
+      "lines": [
+        "b"
+      ],
+      "platforms": 2,
+      "x": 673.66,
+      "y": 666.21
+    },
+    {
+      "id": "burton",
+      "lines": [
+        "a2",
+        "b"
+      ],
+      "platforms": 2,
+      "x": 694.04,
+      "y": 407.03
+    },
+    {
+      "id": "colbourne",
+      "lines": [
+        "a2",
+        "b"
+      ],
+      "platforms": 3,
+      "x": 595.04,
+      "y": 525.11
+    },
+    {
+      "id": "cook",
+      "lines": [
+        "b",
+        "c1",
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 713.22,
+      "y": 279.63
+    },
+    {
+      "id": "cowper",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 1,
+      "x": 250.28,
+      "y": 368.99
+    },
+    {
+      "id": "crescent",
+      "lines": [
+        "a1",
+        "a2",
+        "c1"
+      ],
+      "platforms": 3,
+      "x": 352.83,
+      "y": 155.14
+    },
+    {
+      "id": "dalgal",
+      "lines": [
+        "a1"
+      ],
+      "platforms": 1,
+      "x": 383.81,
+      "y": 339.81
+    },
+    {
+      "id": "federal-park",
+      "lines": [
+        "a1",
+        "a2"
+      ],
+      "platforms": 2,
+      "x": 609.58,
+      "y": 173.11
+    },
+    {
+      "id": "foley-park",
+      "lines": [
+        "a2"
+      ],
+      "platforms": 1,
+      "x": 524.59,
+      "y": 524.67
+    },
+    {
+      "id": "franklyn",
+      "lines": [
+        "b"
+      ],
+      "platforms": 1,
+      "x": 296.63,
+      "y": 320.56
+    },
+    {
+      "id": "glebe-point",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 538.72,
+      "y": 172.86
+    },
+    {
+      "id": "harold-park",
+      "lines": [
+        "a2",
+        "c2"
+      ],
+      "platforms": 1,
+      "x": 374.16,
+      "y": 339.81
+    },
+    {
+      "id": "hegarty",
+      "lines": [
+        "a2"
+      ],
+      "platforms": 1,
+      "x": 373.56,
+      "y": 410.86
+    },
+    {
+      "id": "hogan-park",
+      "lines": [
+        "a1"
+      ],
+      "platforms": 1,
+      "x": 338.17,
+      "y": 277.22
+    },
+    {
+      "id": "jubilee-park",
+      "lines": [
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 410.41,
+      "y": 257.93
+    },
+    {
+      "id": "mitchell",
+      "lines": [
+        "b"
+      ],
+      "platforms": 1,
+      "x": 668.86,
+      "y": 482.51
+    },
+    {
+      "id": "rozelle-bay",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 1,
+      "x": 481.65,
+      "y": 172.74
+    },
+    {
+      "id": "spindler",
+      "lines": [
+        "a1"
+      ],
+      "platforms": 2,
+      "x": 384.16,
+      "y": 410.86
+    },
+    {
+      "id": "st-james",
+      "lines": [
+        "a2"
+      ],
+      "platforms": 1,
+      "x": 453.45,
+      "y": 524.31
+    },
+    {
+      "id": "stadium",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 656.33,
+      "y": 198.49
+    },
+    {
+      "id": "tramsheds",
+      "lines": [
+        "a2",
+        "c2"
+      ],
+      "platforms": 1,
+      "x": 385.14,
+      "y": 227.68
+    },
+    {
+      "id": "wentworth-park",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 1,
+      "x": 687.67,
+      "y": 400.36
+    },
+    {
+      "id": "wigram",
+      "lines": [
+        "a2",
+        "c2"
+      ],
+      "platforms": 3,
+      "x": 379.4,
+      "y": 478.25
+    },
+    {
+      "id": "william-henry",
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "platforms": 2,
+      "x": 850.31,
+      "y": 595.15
+    }
   ],
   "junctions": [
-    { "id": "junction-1", "connects": ["crescent", "federal-park", "junction-4"] },
-    { "id": "junction-2", "connects": ["junction-3", "tramsheds", "jubilee-park"] },
-    { "id": "junction-3", "connects": ["federal-park", "dalgal", "junction-2"] },
-    { "id": "junction-4", "connects": ["rozelle-bay", "junction-1", "jubilee-park"] }
+    {
+      "id": "junction-1",
+      "connects": [
+        "crescent",
+        "federal-park",
+        "junction-4"
+      ],
+      "x": 473.39,
+      "y": 175.51
+    },
+    {
+      "id": "junction-2",
+      "connects": [
+        "junction-3",
+        "tramsheds",
+        "jubilee-park"
+      ],
+      "x": 419.76,
+      "y": 245.84
+    },
+    {
+      "id": "junction-3",
+      "connects": [
+        "federal-park",
+        "dalgal",
+        "junction-2"
+      ],
+      "x": 471.05,
+      "y": 252.92
+    },
+    {
+      "id": "junction-4",
+      "connects": [
+        "rozelle-bay",
+        "junction-1",
+        "jubilee-park"
+      ],
+      "x": 455.15,
+      "y": 202.06
+    }
   ],
   "segments": [
-    { "endpoints": ["crescent", "junction-1"],        "lines": ["a1", "a2", "c1"], "tracks": 2 },
-    { "endpoints": ["junction-1", "federal-park"],    "lines": ["a1", "a2"],       "tracks": 2 },
-    { "endpoints": ["federal-park", "junction-3"],    "lines": ["a1", "a2"],       "tracks": 1 },
-    { "endpoints": ["junction-3", "dalgal"],          "lines": ["a1"],             "tracks": 1 },
-    { "endpoints": ["dalgal", "spindler"],            "lines": ["a1"],             "tracks": 1 },
-    { "endpoints": ["spindler", "hogan-park"],        "lines": ["a1"],             "tracks": 1 },
-    { "endpoints": ["hogan-park", "booth"],           "lines": ["a1"],             "tracks": 1 },
-    { "endpoints": ["junction-3", "junction-2"],      "lines": ["a2"],             "tracks": 1 },
-    { "endpoints": ["junction-2", "tramsheds"],       "lines": ["a2", "c2"],       "tracks": 1 },
-    { "endpoints": ["tramsheds", "harold-park"],      "lines": ["a2", "c2"],       "tracks": 1 },
-    { "endpoints": ["harold-park", "wigram"],         "lines": ["a2", "c2"],       "tracks": 1 },
-    { "endpoints": ["wigram", "hegarty"],             "lines": ["a2"],             "tracks": 1 },
-    { "endpoints": ["hegarty", "st-james"],           "lines": ["a2"],             "tracks": 1 },
-    { "endpoints": ["st-james", "foley-park"],       "lines": ["a2"],             "tracks": 1 },
-    { "endpoints": ["foley-park", "colbourne"],       "lines": ["a2"],             "tracks": 1 },
-    { "endpoints": ["colbourne", "burton"],           "lines": ["a2", "b"],        "tracks": 2 },
-    { "endpoints": ["burton", "blackwattle-bay"],     "lines": ["a2", "b"],        "tracks": 2 },
-    { "endpoints": ["broadway", "franklyn"],          "lines": ["b"],              "tracks": 1 },
-    { "endpoints": ["franklyn", "mitchell"],          "lines": ["b"],              "tracks": 1 },
-    { "endpoints": ["mitchell", "colbourne"],         "lines": ["b"],              "tracks": 1 },
-    { "endpoints": ["blackwattle-bay", "boathouse"],  "lines": ["b", "c1", "c2"],  "tracks": 2 },
-    { "endpoints": ["boathouse", "cook"],             "lines": ["b", "c1", "c2"],  "tracks": 2 },
-    { "endpoints": ["cook", "bellevue"],              "lines": ["b"],              "tracks": 1 },
-    { "endpoints": ["william-henry", "cowper"],       "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["cowper", "stadium"],             "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["stadium", "wentworth-park"],     "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["wentworth-park", "blackwattle-bay"], "lines": ["c1", "c2"],   "tracks": 1 },
-    { "endpoints": ["cook", "bellevue-port"],         "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["bellevue-port", "bridgewater"],  "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["bridgewater", "glebe-point"],    "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["glebe-point", "rozelle-bay"],    "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["rozelle-bay", "junction-4"],     "lines": ["c1", "c2"],       "tracks": 1 },
-    { "endpoints": ["junction-4", "junction-1"],      "lines": ["c1"],             "tracks": 1 },
-    { "endpoints": ["junction-4", "jubilee-park"],    "lines": ["c2"],             "tracks": 1 },
-    { "endpoints": ["jubilee-park", "junction-2"],    "lines": ["c2"],             "tracks": 1 }
+    {
+      "endpoints": [
+        "crescent",
+        "junction-1"
+      ],
+      "lines": [
+        "a1",
+        "a2",
+        "c1"
+      ],
+      "tracks": 2
+    },
+    {
+      "endpoints": [
+        "junction-1",
+        "federal-park"
+      ],
+      "lines": [
+        "a1",
+        "a2"
+      ],
+      "tracks": 2
+    },
+    {
+      "endpoints": [
+        "federal-park",
+        "junction-3"
+      ],
+      "lines": [
+        "a1",
+        "a2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "junction-3",
+        "dalgal"
+      ],
+      "lines": [
+        "a1"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "dalgal",
+        "spindler"
+      ],
+      "lines": [
+        "a1"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "spindler",
+        "hogan-park"
+      ],
+      "lines": [
+        "a1"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "hogan-park",
+        "booth"
+      ],
+      "lines": [
+        "a1"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "junction-3",
+        "junction-2"
+      ],
+      "lines": [
+        "a2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "junction-2",
+        "tramsheds"
+      ],
+      "lines": [
+        "a2",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "tramsheds",
+        "harold-park"
+      ],
+      "lines": [
+        "a2",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "harold-park",
+        "wigram"
+      ],
+      "lines": [
+        "a2",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "wigram",
+        "hegarty"
+      ],
+      "lines": [
+        "a2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "hegarty",
+        "st-james"
+      ],
+      "lines": [
+        "a2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "st-james",
+        "foley-park"
+      ],
+      "lines": [
+        "a2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "foley-park",
+        "colbourne"
+      ],
+      "lines": [
+        "a2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "colbourne",
+        "burton"
+      ],
+      "lines": [
+        "a2",
+        "b"
+      ],
+      "tracks": 2
+    },
+    {
+      "endpoints": [
+        "burton",
+        "blackwattle-bay"
+      ],
+      "lines": [
+        "a2",
+        "b"
+      ],
+      "tracks": 2
+    },
+    {
+      "endpoints": [
+        "broadway",
+        "franklyn"
+      ],
+      "lines": [
+        "b"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "franklyn",
+        "mitchell"
+      ],
+      "lines": [
+        "b"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "mitchell",
+        "colbourne"
+      ],
+      "lines": [
+        "b"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "blackwattle-bay",
+        "boathouse"
+      ],
+      "lines": [
+        "b",
+        "c1",
+        "c2"
+      ],
+      "tracks": 2
+    },
+    {
+      "endpoints": [
+        "boathouse",
+        "cook"
+      ],
+      "lines": [
+        "b",
+        "c1",
+        "c2"
+      ],
+      "tracks": 2
+    },
+    {
+      "endpoints": [
+        "cook",
+        "bellevue"
+      ],
+      "lines": [
+        "b"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "william-henry",
+        "cowper"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "cowper",
+        "stadium"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "stadium",
+        "wentworth-park"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "wentworth-park",
+        "blackwattle-bay"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "cook",
+        "bellevue-port"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "bellevue-port",
+        "bridgewater"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "bridgewater",
+        "glebe-point"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "glebe-point",
+        "rozelle-bay"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "rozelle-bay",
+        "junction-4"
+      ],
+      "lines": [
+        "c1",
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "junction-4",
+        "junction-1"
+      ],
+      "lines": [
+        "c1"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "junction-4",
+        "jubilee-park"
+      ],
+      "lines": [
+        "c2"
+      ],
+      "tracks": 1
+    },
+    {
+      "endpoints": [
+        "jubilee-park",
+        "junction-2"
+      ],
+      "lines": [
+        "c2"
+      ],
+      "tracks": 1
+    }
   ],
-  "interchanges": ["crescent", "wigram", "blackwattle-bay", "colbourne"],
-  "terminii": ["booth", "crescent", "blackwattle-bay", "broadway", "bellevue", "william-henry", "wigram"]
+  "interchanges": [
+    "crescent",
+    "wigram",
+    "blackwattle-bay",
+    "colbourne"
+  ],
+  "terminii": [
+    "booth",
+    "crescent",
+    "blackwattle-bay",
+    "broadway",
+    "bellevue",
+    "william-henry",
+    "wigram"
+  ]
 }
