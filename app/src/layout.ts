@@ -16,14 +16,18 @@ function allNodesHavePositions(network: Network): boolean {
 
 export function computeLayout(network: Network, width: number, height: number): Positions {
   if (allNodesHavePositions(network)) {
-    const scaleX = (width - PADDING * 2) / SVG_W
-    const scaleY = (height - PADDING * 2) / SVG_H
+    const scale = Math.min(
+      (width  - PADDING * 2) / SVG_W,
+      (height - PADDING * 2) / SVG_H,
+    )
+    const offsetX = (width  - SVG_W * scale) / 2
+    const offsetY = (height - SVG_H * scale) / 2
     const positions: Positions = new Map()
     for (const s of network.json.stops) {
-      positions.set(s.id, { id: s.id, x: PADDING + s.x! * scaleX, y: PADDING + s.y! * scaleY })
+      positions.set(s.id, { id: s.id, x: offsetX + s.x! * scale, y: offsetY + s.y! * scale })
     }
     for (const j of network.json.junctions) {
-      positions.set(j.id, { id: j.id, x: PADDING + j.x! * scaleX, y: PADDING + j.y! * scaleY })
+      positions.set(j.id, { id: j.id, x: offsetX + j.x! * scale, y: offsetY + j.y! * scale })
     }
     return positions
   }
