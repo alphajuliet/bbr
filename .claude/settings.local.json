@@ -5,7 +5,10 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
       "Bash(curl -s http://localhost:5173/src/main.ts)",
       "Bash(open *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(python3 *)",
+      "Bash(git -C /Users/andrew/Documents/Projects/transport/bbr add data/bbr-network.json)",
+      "Bash(git -C /Users/andrew/Documents/Projects/transport/bbr commit -m \"Add foley-park stop to a2 line between st-james and colbourne\")"
     ]
   }
 }

@@ -1,2 +1,4 @@
 .DS_Store
 images/
+scripts/__pycache__/
+.claude/
