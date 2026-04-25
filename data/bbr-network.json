@@ -100,7 +100,7 @@
     { "endpoints": ["harold-park", "wigram"],         "lines": ["a2", "c2"],       "tracks": 1 },
     { "endpoints": ["wigram", "hegarty"],             "lines": ["a2"],             "tracks": 1 },
     { "endpoints": ["hegarty", "st-james"],           "lines": ["a2"],             "tracks": 1 },
-    { "endpoints": ["st-james", "foley-park"],         "lines": ["a2"],             "tracks": 1 },
+    { "endpoints": ["st-james", "foley-park"],       "lines": ["a2"],             "tracks": 1 },
     { "endpoints": ["foley-park", "colbourne"],       "lines": ["a2"],             "tracks": 1 },
     { "endpoints": ["colbourne", "burton"],           "lines": ["a2", "b"],        "tracks": 2 },
     { "endpoints": ["burton", "blackwattle-bay"],     "lines": ["a2", "b"],        "tracks": 2 },
