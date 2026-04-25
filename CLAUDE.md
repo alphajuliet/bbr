@@ -25,7 +25,7 @@ npm run build     # tsc + Vite production build → app/dist/
 **Source layout** (`app/src/`):
 - `types.ts` — all TypeScript interfaces (JSON schema types + sim types)
 - `network.ts` — parse JSON, build derived structures; key export: `buildNetwork()`, `getLegSegments()`, `otherEndpoint()`
-- `layout.ts` — d3-force run-once headless layout → `Positions` map
+- `layout.ts` — computes `Positions` map; uses fixed SVG-derived coordinates from JSON when all stops/junctions have `x`/`y`, otherwise falls back to a d3-force headless simulation
 - `sim.ts` — `SimState` + `tickSim(state, network, dtWall)` tick loop; train state machine; block and platform occupancy
 - `render.ts` — static SVG (segments with per-line colour offsets, stop/junction nodes) + `renderFrame()` for animated train markers
 - `ui.ts` — play/pause/speed controls, sim clock, train inspector panel, stop arrivals panel
@@ -90,8 +90,8 @@ The file `require`s several non-built-in packages. Install with `raco pkg instal
 
 - `simulation` — uniform timing constants in seconds: `segment-travel-time-seconds`, `dwell-time-seconds`, `turnaround-time-seconds`.
 - `lines[]` — `id`, ordered `stops`, `terminii`, `headway-seconds`, `max-trains`, `colour`.
-- `stops[]` — `id`, `lines` (which lines stop here), `platforms` (≥1; >1 ⇒ passing loop / turnaround / multi-line dwell).
-- `junctions[]` — track nodes where lines meet *outside* a stop. `id` plus optional `connects` (adjacent stops/junctions). Junction IDs are disjoint from stop IDs.
+- `stops[]` — `id`, `label` (display name, e.g. `"Foley Park"`), `lines` (which lines stop here), `platforms` (≥1; >1 ⇒ passing loop / turnaround / multi-line dwell), `x`/`y` (position in SVG viewport units, 0–1190 × 0–842).
+- `junctions[]` — track nodes where lines meet *outside* a stop. `id`, optional `connects` (adjacent stops/junctions), and `x`/`y` (SVG viewport coordinates). Junction IDs are disjoint from stop IDs.
 - `segments[]` — first-class inter-node edges. `endpoints` (unordered; either may be a stop or a junction), `lines` (every line using this segment), `tracks` (`1` = single-track block, `2` = parallel tracks).
 - `interchanges` / `terminii` — flat stop-id lists for quick reference.
 
@@ -100,9 +100,10 @@ The file `require`s several non-built-in packages. Install with `raco pkg instal
 - **Block-per-segment signalling.** `tracks: 1` ⇒ one train at a time, either direction. Where lines share physical track, the segment is listed **once** with all sharing line IDs — trains from those lines contend for the same block. Don't duplicate a segment per line.
 - **Junctions aren't stops.** A line's `stops` list skips its junctions. To reconstruct the physical path between two consecutive stops, walk `segments` via intermediate junctions (e.g. `a1` runs `crescent → junction-1 → federal-park`, not a direct edge).
 - **Uniform travel time.** `simulation.segment-travel-time-seconds` applies to every segment — no per-segment overrides by design. Promote to a per-segment field only if distance realism matters.
-- **No coordinates.** Layout is computed at runtime.
+- **Coordinates.** All stops and junctions carry `x`/`y` in SVG viewport units (extracted from `images/bbr.svg` and manually corrected). `layout.ts` scales these to canvas size at runtime using aspect-ratio-preserving uniform scaling with 40 px padding. Do not remove coordinates — the d3-force fallback produces an inferior layout.
 - **Platform defaults.** Named interchanges = 3, single-line terminii = 2, everything else = 1. These are starting points — adjust when the simulator reveals bottlenecks.
 - **Four junctions** are currently defined: `junction-1` (crescent/federal-park/junction-4 fork), `junction-2` (junction-3/tramsheds/jubilee-park fork), `junction-3` (federal-park/dalgal/junction-2 fork), `junction-4` (rozelle-bay/junction-1/jubilee-park fork). When adding a junction, declare it in `junctions[]`, add its segments, update any `connects` arrays on adjacent junctions that now route through it, and verify the BFS path invariant for every affected line.
+- **30 stops** are currently defined, including `foley-park` (line a2, between `st-james` and `colbourne`).
 
 ### Invariants to re-check after edits
 
